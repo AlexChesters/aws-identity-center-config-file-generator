@@ -35,6 +35,10 @@ def get_accounts_for_user(session: boto3.Session, instance_arn: str, user_id: st
         account_client = session.client("organizations")
         account_name = account_client.describe_account(AccountId=account_id)["Account"]["Name"]
 
-        results.append(UserAccount(account_id=account_id, account_name=account_name, role_name=permission_set_name))
+        results.append(UserAccount(
+            account_id=account_id,
+            account_name=account_name,
+            role_name=permission_set_name
+        ))
 
     return results

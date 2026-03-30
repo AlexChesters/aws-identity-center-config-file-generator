@@ -6,7 +6,7 @@ sso_start_url = {{ sso_start_url }}
 sso_session = session
 
 {% for account in accounts %}
-[profile {{ account.account_name }}]
+[profile {{ account.account_name | replace(" ", "-") | lower }}-{{ account.role_name | replace(" ", "-") | lower }}]
 sso_session = session
 sso_account_id = {{ account.account_id }}
 sso_role_name = {{ account.role_name }}
