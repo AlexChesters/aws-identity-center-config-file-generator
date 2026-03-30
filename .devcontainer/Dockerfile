@@ -1,0 +1,48 @@
+FROM public.ecr.aws/ubuntu/ubuntu:22.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# install packages
+RUN apt-get update -y && apt-get install -y \
+    git \
+    make \
+    unzip \
+    curl \
+    software-properties-common \
+    pipx \
+    pkg-config \
+    vim
+
+# configure path
+ENV PATH="$PATH:/root/.local/bin"
+
+# configure environment variables
+ENV EDITOR=vim
+
+# install aws-cli
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip" && unzip awscliv2.zip
+RUN ./aws/install
+
+# install rain
+RUN curl -L -o /tmp/rain.zip https://github.com/aws-cloudformation/rain/releases/download/v1.24.3/rain-v1.24.3_linux-arm64.zip
+RUN unzip /tmp/rain.zip
+RUN mv ./rain-v1.24.3_linux-arm64/rain /usr/local/bin/rain
+
+# install python
+RUN add-apt-repository ppa:deadsnakes/ppa -y && \
+    apt-get update -y && \
+    apt-get install -y python3.13 python3.13-venv python3.13-dev python3-pip
+
+# install cfn-lint
+RUN pip install cfn-lint==1.47.1
+
+# install uv
+RUN curl --proto '=https' --tlsv1.2 -LsSf https://releases.astral.sh/github/uv/releases/download/0.11.1/uv-installer.sh | sh
+ENV UV_LINK_MODE=copy
+
+# configure bash aliases
+RUN echo "alias ls='ls -alh'" >> /root/.bashrc
+RUN echo "alias gco='git checkout'" >> /root/.bashrc
+RUN echo "alias gs='git status'" >> /root/.bashrc
+RUN echo "alias ga='git add .'" >> /root/.bashrc
+RUN echo "alias gc='git commit'" >> /root/.bashrc

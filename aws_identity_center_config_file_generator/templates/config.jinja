@@ -1,0 +1,13 @@
+[sso-session session]
+sso_region = {{ region_name }}
+sso_start_url = {{ sso_start_url }}
+
+[default]
+sso_session = session
+
+{% for account in accounts %}
+[profile {{ account.account_name }}]
+sso_session = session
+sso_account_id = {{ account.account_id }}
+sso_role_name = {{ account.role_name }}
+{% endfor %}

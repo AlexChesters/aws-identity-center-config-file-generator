@@ -1,0 +1,8 @@
+{
+  "chat.tools.terminal.autoApprove": {
+    "/^uv run aws_identity_center_config_file_generator/main\\.py$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  }
+}
